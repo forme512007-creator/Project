@@ -26,16 +26,15 @@ function Projects() {
     <>
       <Navbar />
 
-      <section className="min-h-screen bg-slate-950 text-white px-8 py-20">
-        <h1 className="text-5xl font-bold text-center mb-4">
+      <section className="min-h-screen bg-slate-950 text-white px-4 sm:px-6 py-12 md:py-20">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-4">
           My Projects
         </h1>
 
         <p className="text-center text-gray-400 mb-16">
           Some projects I have built using modern web technologies.
         </p>
-
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {projects.map((project) => (
             <div
               key={project.title}

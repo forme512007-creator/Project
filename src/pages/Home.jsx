@@ -10,12 +10,12 @@ return (
 
 
   <section className="min-h-screen bg-slate-950 text-white overflow-hidden">
-    <div className="max-w-7xl mx-auto px-6 pt-24">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-16 md:pt-24">
 
-      <div className="grid lg:grid-cols-2 gap-16 items-center">
+     <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
 
         {/* LEFT */}
-        <motion.div
+        <motion.div className="text-center lg:text-left"
           initial={{ opacity: 0, x: -80 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 1 }}
@@ -24,7 +24,7 @@ return (
             👋 Hello, I'm
           </p>
 
-          <h1 className="text-6xl md:text-8xl font-black leading-tight bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-black leading-tight">
             Harsh Panchal
           </h1>
 
@@ -50,7 +50,7 @@ return (
             modern web applications using React and Tailwind CSS.
           </p>
 
-          <div className="flex gap-4 mt-8">
+         <div className="flex flex-col sm:flex-row gap-4 mt-8">
             <button className="px-8 py-3 rounded-full bg-cyan-500 hover:scale-105 transition">
               View Projects
             </button>
@@ -89,7 +89,7 @@ return (
       </div>
 
       {/* STATS */}
-      <div className="grid md:grid-cols-3 gap-6 mt-24">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-16 md:mt-24">
         <div className="bg-slate-900 p-8 rounded-2xl text-center">
           <h2 className="text-4xl font-bold text-cyan-400">10+</h2>
           <p className="text-gray-400 mt-2">Projects Completed</p>
