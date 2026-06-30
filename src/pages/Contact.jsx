@@ -1,42 +1,23 @@
-import { useState } from "react";
+import React from "react";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
 import Navbar from "../components/Navbar";
+import emailjs from "@emailjs/browser";
+
+
+const ContactSchema = Yup.object().shape({
+  name: Yup.string().required("Name is required"),
+  email: Yup.string()
+    .email("Invalid email format")
+    .required("Email is required"),
+  message: Yup.string().required("Message is required"),
+});
 
 function Contact() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    message: "",
-  });
-
-  const [success, setSuccess] = useState(false);
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    if (!formData.name || !formData.email || !formData.message) {
-      alert("Please fill all fields");
-      return;
-    }
-
-    setSuccess(true);
-
-    setFormData({
-      name: "",
-      email: "",
-      message: "",
-    });
-
-    setTimeout(() => {
-      setSuccess(false);
-    }, 3000);
-  };
+  // Load EmailJS credentials from .env
+  const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+  const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+  const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 
   return (
     <>
@@ -48,47 +29,85 @@ function Contact() {
             Contact Me
           </h1>
 
-          {success && (
-            <div className="mb-4 p-3 rounded bg-green-600 text-center">
-              Message sent successfully!
-            </div>
-          )}
+          <Formik
+            initialValues={{ name: "", email: "", message: "" }}
+            validationSchema={ContactSchema}
+            onSubmit={(values, { resetForm, setSubmitting }) => {
+              // Send email via EmailJS
+              emailjs
+                .send(serviceId, templateId, values, publicKey)
+                .then((response) => {
+                  console.log("Success!", response.status, response.text);
+                  alert("Message sent successfully!");
+                  resetForm();
+                  setSubmitting(false);
+                })
+                .catch((err) => {
+                  console.error("Failed to send email:", err);
+                  alert("Failed to send message.");
+                  setSubmitting(false);
+                });
+            }}
+          >
+            {({ isSubmitting }) => (
+              <Form className="space-y-4">
+                {/* Name */}
+                <div>
+                  <Field
+                    type="text"
+                    name="name"
+                    placeholder="Name"
+                    className="w-full p-4 rounded bg-slate-800"
+                  />
+                  <ErrorMessage
+                    name="name"
+                    component="div"
+                    className="text-red-400 text-sm mt-1"
+                  />
+                </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <input
-              type="text"
-              name="name"
-              placeholder="Name"
-              value={formData.name}
-              onChange={handleChange}
-              className="w-full p-4 rounded bg-slate-800"
-            />
+                {/* Email */}
+                <div>
+                  <Field
+                    type="email"
+                    name="email"
+                    placeholder="Email"
+                    className="w-full p-4 rounded bg-slate-800"
+                  />
+                  <ErrorMessage
+                    name="email"
+                    component="div"
+                    className="text-red-400 text-sm mt-1"
+                  />
+                </div>
 
-            <input
-              type="email"
-              name="email"
-              placeholder="Email"
-              value={formData.email}
-              onChange={handleChange}
-              className="w-full p-4 rounded bg-slate-800"
-            />
+                {/* Message */}
+                <div>
+                  <Field
+                    as="textarea"
+                    rows="5"
+                    name="message"
+                    placeholder="Message"
+                    className="w-full p-4 rounded bg-slate-800"
+                  />
+                  <ErrorMessage
+                    name="message"
+                    component="div"
+                    className="text-red-400 text-sm mt-1"
+                  />
+                </div>
 
-            <textarea
-              rows="5"
-              name="message"
-              placeholder="Message"
-              value={formData.message}
-              onChange={handleChange}
-              className="w-full p-4 rounded bg-slate-800"
-            />
-
-            <button
-              type="submit"
-              className="w-full bg-cyan-500 py-4 rounded hover:bg-cyan-600 transition"
-            >
-              Send Message
-            </button>
-          </form>
+                {/* Submit Button */}
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full bg-cyan-500 py-4 rounded hover:bg-cyan-600 transition"
+                >
+                  {isSubmitting ? "Sending..." : "Send Message"}
+                </button>
+              </Form>
+            )}
+          </Formik>
         </div>
       </div>
     </>
