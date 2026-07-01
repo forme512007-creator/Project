@@ -12,7 +12,7 @@ function Navbar() {
           Harsh Panchal
         </h1>
 
-        <div className="hidden md:flex gap-8 text-lg font-medium">
+        <div className="hidden md:flex gap-8 text-lg font-medium font-bold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
           <Link to="/">Home</Link>
           <Link to="/about">About</Link>
           <Link to="/skills">Skills</Link>
